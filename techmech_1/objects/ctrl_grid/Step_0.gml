@@ -90,7 +90,6 @@ if state == "unitchosen" && team == team_player
 					if target.team != current_unit.team
 						{
 						target.hp -= 10
-						grid_occ[mouse_xxx,mouse_yyy].hp -= 10
 						current_unit.state = "wait"
 						state = "command"
 						current_unit = noone
@@ -379,7 +378,8 @@ if state == "command" && team == team_player
 																	if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
 																		if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
 																			{
-																			other.grid_hit[xxx,yyy] = 1
+																			if xxx >= 0 && yyy >=0
+																				other.grid_hit[xxx,yyy] = 1
 																			}
 																	}
 												}
@@ -506,7 +506,8 @@ if state == "command" && team == team_player
 																	if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
 																		if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
 																			{
-																			other.grid_hit[xxx,yyy] = 1
+																			if xxx>= 0 && yyy >= 0
+																				other.grid_hit[xxx,yyy] = 1
 																			}
 																	}
 													}
@@ -646,16 +647,12 @@ if state == "command" && team != team_player
 
 if state == "unitchosen_ai"
 	{
+	//choose a random target
+	var victim = ds_list_find_value(team1,0)
 	if current_unit.state == "ready"
 		{
-		//choose a random target
-		var victim = ds_list_find_value(team1,1)
-		
-		
 		current_unit.state = "moving"
-		scr_ai_follow(victim)
-		
-			
+		scr_ai_follow(victim)	
 		}
 		
 	//This is what happens when unit is done moving
@@ -666,13 +663,35 @@ if state == "unitchosen_ai"
 			if path_position == 1
 				{
 				path_position = 0 
-				state = "wait"
-				other.state = "command"
-				other.current_unit = noone
+				state = "action"
 				other.grid_updated = false
 				other.action_complete = true
 				scr_update_hit_grid()
 				}
+		}
+		
+	//Attack if it can
+	
+	if current_unit.state == "action"
+		{
+		//check if target is in hit range
+		for (xx=0;xx<grid_width;xx++)
+			for (yy=0;yy<grid_width;yy++)
+				{
+				if grid_hit[xx,yy] == 1
+					{
+					if grid_occ[xx,yy] == victim
+						{
+						victim.hp -= 10
+						break;
+						}
+					}
+				}
+		current_unit.state = "wait"
+		state = "command"
+		current_unit = noone
+		grid_updated = false
+		action_complete = true
 		}
 	}
 

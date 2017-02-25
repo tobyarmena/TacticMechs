@@ -1,4 +1,4 @@
-draw_set_alpha(0.3)
+draw_set_alpha(0)
 mp_grid_draw(grid)
 draw_set_alpha(1)
 
@@ -58,9 +58,9 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 					if parent == par_unit
 						draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
 					else if parent == par_ride
-						if grid_mov[xx-1,yy-1] != 1
-							if grid_mov[xx-1,yy] != 1
-								if grid_mov[xx,yy-1] != 1
+						if grid_mov[max(0,xx-1),max(0,yy-1)] != 1
+							if grid_mov[max(0,xx-1),max(0,yy)] != 1
+								if grid_mov[max(0,xx),max(0,yy-1)] != 1
 									draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
 					}
 				else if state == "unitchosen" 
@@ -72,9 +72,9 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 					{
 					if current_unit.state == "ready" || current_unit.state == "attacking"
 						{
-						if grid_mov[xx-1,yy-1] != 1
-							if grid_mov[xx-1,yy] != 1
-								if grid_mov[xx,yy-1] != 1
+						if grid_mov[max(0,xx-1),max(0,yy-1)] != 1
+							if grid_mov[max(0,xx-1),max(0,yy)] != 1
+								if grid_mov[max(0,xx),max(0,yy-1)] != 1
 									draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
 						}
 					}
@@ -150,22 +150,18 @@ if state == "unitchosen"
 	}
 else if state == "ridechosen"
 	{
-	if current_unit.state == "ready"
-		{
-
-		var mouse_xx = floor(mouse_x/grid_size)
-		var mouse_yy = floor(mouse_y/grid_size)
-		
+	if current_unit.state == "ready" && !(mouse_xxx == current_unit.xpos && mouse_yyy == current_unit.ypos)
+		{		
 		//draw square
 		draw_sprite(spr_select_2x2,0,(mouse_xxx+1)*grid_size,(mouse_yyy+1)*grid_size)
 		
 		
-		if grid_mov[mouse_xx,mouse_yy]  
+		if grid_mov[mouse_xxx,mouse_yyy]  
 			{
-			if mouse_xx_check!= mouse_xx || mouse_yy_check != mouse_yy	
+			if mouse_xx_check!= mouse_xxx || mouse_yy_check != mouse_yyy	
 				{
-				mouse_xx_check = mouse_xx
-				mouse_yy_check = mouse_yy
+				mouse_xx_check = mouse_xxx
+				mouse_yy_check = mouse_yyy
 				show_path = path_add()
 				with(current_unit)
 					{

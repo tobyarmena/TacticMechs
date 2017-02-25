@@ -14,8 +14,9 @@ with(ctrl_grid)
 							if abs(xx-xp) + abs(yy-yp) <= attack_range_max
 								if abs(xx-xp) + abs(yy-yp) >= attack_range_min
 									{
-									if other.grid_occ[xx,yy] != id
-										other.grid_hit[xx,yy] = 1
+									if xx >= 0 && yy >= 0
+										if other.grid_occ[xx,yy] != id
+											other.grid_hit[xx,yy] = 1
 									}
 							}
 			

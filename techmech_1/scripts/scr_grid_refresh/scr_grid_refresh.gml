@@ -26,10 +26,10 @@ with(ctrl_grid)
 				}
 			else if par == par_ride
 				{
-				mp_grid_clear_cell(grid,unit.xpos,current_unit.ypos)
-				mp_grid_clear_cell(grid,unit.xpos+1,current_unit.ypos)
-				mp_grid_clear_cell(grid,unit.xpos,current_unit.ypos+1)
-				mp_grid_clear_cell(grid,unit.xpos+1,current_unit.ypos+1)
+				mp_grid_clear_cell(grid,unit.xpos,unit.ypos)
+				mp_grid_clear_cell(grid,unit.xpos+1,unit.ypos)
+				mp_grid_clear_cell(grid,unit.xpos,unit.ypos+1)
+				mp_grid_clear_cell(grid,unit.xpos+1,unit.ypos+1)
 				}
 			}
 		/*

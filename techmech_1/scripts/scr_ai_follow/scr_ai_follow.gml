@@ -3,26 +3,65 @@
 with(current_unit)
 	{
 	var target = argument0
+	var par = object_get_parent(target.object_index)
 	
 	//check if unit can already hit 
-	if abs(target.xpos-xpos) + abs(target.ypos-ypos) <= attack_range_max	
-		if abs(target.xpos-xpos) + abs(target.ypos-ypos) >= attack_range_min
-			{
-			scr_wait()
-			exit;
-			}
+	if par == par_unit
+		{
+		if abs(target.xpos-xpos) + abs(target.ypos-ypos) <= attack_range_max	
+			if abs(target.xpos-xpos) + abs(target.ypos-ypos) >= attack_range_min
+				{
+				with(other)
+					scr_ai_action()
+				exit;
+				}
+		}
+	else if par == par_ride
+		{
+		for(xx = 0 ; xx <2 ; xx++)
+			for(yy = 0 ; yy <2 ; yy++)
+				if abs(target.xpos+xx-xpos) + abs(target.ypos+yy-ypos) <= attack_range_max	
+					if abs(target.xpos+xx-xpos) + abs(target.ypos+yy-ypos) >= attack_range_min
+						{
+						with(other)
+							scr_ai_action()
+						exit;
+						}
+		}
+			
 
 	//find target position (position that unit can attack target from)
-	for (xx = 0; xx < other.grid_width; xx++)
-		for (yy = 0; yy < other.grid_width; yy++)
-			{
-			other.grid_ai[xx,yy] = 0
-			if abs(target.xpos-xx) + abs(target.ypos-yy) <= attack_range_max	
-				if abs(target.xpos-xx) + abs(target.ypos-yy) >= attack_range_min
-					{
-					other.grid_ai[xx,yy] = 1
-					}
-			}	
+	if par == par_unit	
+		{
+		for (xx = 0; xx < other.grid_width; xx++)
+			for (yy = 0; yy < other.grid_width; yy++)
+				{
+				other.grid_ai[xx,yy] = 0
+				if abs(target.xpos-xx) + abs(target.ypos-yy) <= attack_range_max	
+					if abs(target.xpos-xx) + abs(target.ypos-yy) >= attack_range_min
+						{
+						other.grid_ai[xx,yy] = 1
+						}
+				}	
+		}
+	else if par == par_ride
+		{
+		for (xx = 0; xx < other.grid_width; xx++)
+			for (yy = 0; yy < other.grid_width; yy++)
+				other.grid_ai[xx,yy] = 0
+		for(xxx = 0 ; xxx <2 ; xxx++)
+			for(yyy = 0 ; yyy <2 ; yyy++)
+				for (xx = 0; xx < other.grid_width; xx++)
+					for (yy = 0; yy < other.grid_width; yy++)
+						{
+						other.grid_ai[xx+xxx,yy+yyy] = 0
+						if abs(target.xpos-xx+xxx) + abs(target.ypos-yy+yyy) <= attack_range_max	
+							if abs(target.xpos-xx+xxx) + abs(target.ypos-yy+yyy) >= attack_range_min
+								{
+								other.grid_ai[xx,yy] = 1
+								}
+						}
+		}
 	}
 //find the closest target position
 var startx = current_unit.xpos*grid_size + grid_size/2
@@ -87,7 +126,7 @@ else
 //check if already in position
 if (gox == current_unit.xpos && goy == current_unit.ypos) || (grid_occ[gox,goy] != noone)
 	{
-	scr_ai_wait()
+	scr_ai_action()
 	}
 else
 	{
