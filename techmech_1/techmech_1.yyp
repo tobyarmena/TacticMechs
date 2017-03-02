@@ -143,6 +143,14 @@
             }
         },
         {
+            "Key": "3363f072-e92e-4552-be4e-0aa31d76ed9c",
+            "Value": {
+                "id": "bea1a36a-eb01-4158-becf-6274e80ae48b",
+                "resourcePath": "objects\\obj_mech_1\\obj_mech_1.yy",
+                "resourceType": "GMObject"
+            }
+        },
+        {
             "Key": "381194df-c952-4a44-be5d-de87174a5277",
             "Value": {
                 "id": "88a25522-6d98-4a6b-bef0-845a64ca2823",
@@ -188,6 +196,14 @@
                 "id": "73ec28a8-7b97-46af-b781-f90c8b30e896",
                 "resourcePath": "fonts\\fnt_menu\\fnt_menu.yy",
                 "resourceType": "GMFont"
+            }
+        },
+        {
+            "Key": "58f5fc32-b407-4ca6-a1e5-9bd0efa9e193",
+            "Value": {
+                "id": "08dbaac2-9726-4c4b-8bfb-4b507c4ddffd",
+                "resourcePath": "scripts\\scr_grid_refresh_team\\scr_grid_refresh_team.yy",
+                "resourceType": "GMScript"
             }
         },
         {
@@ -415,6 +431,14 @@
             }
         },
         {
+            "Key": "c929f622-c2c7-4a2d-9f35-b766bf48de0d",
+            "Value": {
+                "id": "5e029d47-dccb-48a8-8def-2911b4409e03",
+                "resourcePath": "scripts\\mp_grid_path_2x2\\mp_grid_path_2x2.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "cb811507-b2ca-4c67-b119-6554d7fa5e56",
             "Value": {
                 "id": "e03b424f-509f-441a-9c5f-728ff8d5faca",
@@ -514,7 +538,9 @@
         "d4553e85-33ec-4bb0-a64c-d63eeeae03a8",
         "1e01c882-7da3-43e7-b5f4-58c822841321",
         "0e9e176d-c17a-4ed8-8e87-fdcde0b4448b",
-        "138d10e2-e050-44ca-af2b-979048eb4b0e"
+        "138d10e2-e050-44ca-af2b-979048eb4b0e",
+        "58f5fc32-b407-4ca6-a1e5-9bd0efa9e193",
+        "c929f622-c2c7-4a2d-9f35-b766bf48de0d"
     ],
     "tutorial": ""
 }

@@ -112,7 +112,7 @@ if current_unit != noone
 //draw path
 if state == "unitchosen"
 	{
-	if current_unit.state == "ready"
+	if current_unit.state == "ready" && !(mouse_xxx == current_unit.xpos && mouse_yyy == current_unit.ypos)
 		{
 		var mouse_xx = floor(mouse_x/grid_size)
 		var mouse_yy = floor(mouse_y/grid_size)
@@ -163,79 +163,13 @@ else if state == "ridechosen"
 				mouse_xx_check = mouse_xxx
 				mouse_yy_check = mouse_yyy
 				show_path = path_add()
-				with(current_unit)
-					{
-					with(par_wall)
-						{
-						mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-						mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-						mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-						}
-					with(par_unit)
-						{
-						mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-						mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-						mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-						}
-					//top left path
-					if mp_grid_path(ctrl_grid.grid, 
-									path1, 
-									x, 
-									y, 
-									other.mouse_xxx*ctrl_grid.grid_size+ctrl_grid.grid_size/2, 
-									other.mouse_yyy*ctrl_grid.grid_size+ctrl_grid.grid_size/2, 
-									false)
-					{
-					scr_grid_refresh()
-					//top right path
-					if mp_grid_path(ctrl_grid.grid, 
-									path2, 
-									x+ctrl_grid.grid_size, 
-									y, 
-									other.mouse_xxx*ctrl_grid.grid_size+ctrl_grid.grid_size/2+ctrl_grid.grid_size, 
-									other.mouse_yyy*ctrl_grid.grid_size+ctrl_grid.grid_size/2, 
-									false)
-					//bottom left path
-					if mp_grid_path(ctrl_grid.grid, 
-									path3, 
-									x, 
-									y+ctrl_grid.grid_size, 
-									other.mouse_xxx*ctrl_grid.grid_size+ctrl_grid.grid_size/2, 
-									other.mouse_yyy*ctrl_grid.grid_size+ctrl_grid.grid_size/2+ctrl_grid.grid_size, 
-									false)
-					//bottom right path
-					if mp_grid_path(ctrl_grid.grid, 
-									path4, 
-									x+ctrl_grid.grid_size, 
-									y+ctrl_grid.grid_size, 
-									other.mouse_xxx*ctrl_grid.grid_size+ctrl_grid.grid_size/2+ctrl_grid.grid_size, 
-									other.mouse_yyy*ctrl_grid.grid_size+ctrl_grid.grid_size/2+ctrl_grid.grid_size, 
-									false)
-						{
-						with(par_wall)
-							{
-							mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-							mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-							mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-							}
-						with(par_unit)
-							{
-							mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-							mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-							mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-							}
-						//top left path
-						mp_grid_path(ctrl_grid.grid, 
-									other.show_path, 
-									x, 
-									y, 
-									other.mouse_xxx*ctrl_grid.grid_size+ctrl_grid.grid_size/2, 
-									other.mouse_yyy*ctrl_grid.grid_size+ctrl_grid.grid_size/2, 
-									false)
-						scr_grid_refresh()
-						}
-					}
-				}
+				mp_grid_path_2x2(grid, 
+								show_path, 
+								current_unit.x, 
+								current_unit.y, 
+								mouse_xxx*grid_size+grid_size/2, 
+								mouse_yyy*grid_size+grid_size/2, 
+								false)
 				}
 			if path_exists(show_path)
 				{

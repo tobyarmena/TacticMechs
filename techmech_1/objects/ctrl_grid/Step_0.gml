@@ -263,12 +263,14 @@ if state == "ridechosen" && team == team_player
 
 if state == "command" && team == team_player
 	{
+	//Quick End
 	if keyboard_check_pressed(vk_space)
 		{
 		with(par_unit)
 			state = "wait"
 		with(par_ride)
 			state = "wait"
+		exit;
 		}
 	
 		
@@ -290,14 +292,14 @@ if state == "command" && team == team_player
 			parent = object_get_parent(grid_occ[mouse_xxx,mouse_yyy].object_index)
 			
 			//Update the grid to display movement of unit under the cursor
-			if grid_updated = false && grid_occ[mouse_xxx,mouse_yyy].state == "ready" && parent == par_unit
+			if grid_updated = false && (grid_occ[mouse_xxx,mouse_yyy].state == "ready" || grid_occ[mouse_xxx,mouse_yyy].team != team_player) && parent == par_unit
 				{
 				grid_updated = true
 				scr_update_map()
 				
 				with(grid_occ[mouse_xxx,mouse_yyy])
 					{
-					scr_grid_refresh()
+					scr_grid_refresh_team(team)
 					for (xx = xpos - move_range;xx <= xpos + move_range;xx++)
 						{
 						for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
@@ -324,8 +326,9 @@ if state == "command" && team == team_player
 						}
 					}
 				}
+				
 			//Update the grid to display movement of ride under the cursor
-			else if grid_updated = false && grid_occ[mouse_xxx,mouse_yyy].state == "ready" && parent == par_ride
+			else if grid_updated = false && (grid_occ[mouse_xxx,mouse_yyy].state == "ready"|| grid_occ[mouse_xxx,mouse_yyy].team != team_player) && parent == par_ride
 				{
 				
 				grid_updated = true
@@ -333,58 +336,31 @@ if state == "command" && team == team_player
 				scr_update_map()	
 				with(grid_occ[mouse_xxx,mouse_yyy])
 					{
-					scr_grid_refresh()
+					scr_grid_refresh_team(team)
 					for (xx = xpos - move_range;xx <= xpos + move_range;xx++)
 						for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
 							{
-							with(par_wall)
+							if mp_grid_path_2x2(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
 								{
-								mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-								mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-								mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-								}
-							with(par_unit)
-								{
-								mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-								mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-								mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-								}
-							//top left position
-							if mp_grid_path(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
-								{
-								scr_grid_refresh()
 								if path_get_length(path1)/ctrl_grid.grid_size <= move_range
-								//top right position
-								if mp_grid_path(other.grid,path2,x+other.grid_size,y,(xx+1)*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
 									{
-									if path_get_length(path2)/ctrl_grid.grid_size <= move_range
-									//bottom left position
-									if mp_grid_path(other.grid,path3,x,y+other.grid_size,(xx)*other.grid_size+other.grid_size/2,(yy+1)*other.grid_size+other.grid_size/2,false)
-										{
-										if path_get_length(path3)/ctrl_grid.grid_size <= move_range
-										//bottom right position
-										if mp_grid_path(other.grid,path4,x+other.grid_size,y+other.grid_size,(xx+1)*other.grid_size+other.grid_size/2,(yy+1)*other.grid_size+other.grid_size/2,false)
-											{
-											if path_get_length(path4)/ctrl_grid.grid_size <= move_range
-												{
-												other.grid_mov[xx,yy] = 1
+									other.grid_mov[xx,yy] = 1	
+									//Set hittable positions
+									for (xp = xx; xp <= xx+1;xp++)
+										for (yp = yy; yp <= yy+1;yp++)
+											for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
+												for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
+													{
+													if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
+														if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
+															{
+															if xxx >= 0 && yyy >=0
+																other.grid_hit[xxx,yyy] = 1
+															}
+													}
 												
-												//Set hittable positions
-													for (xp = xx; xp <= xx+1;xp++)
-														for (yp = yy; yp <= yy+1;yp++)
-															for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
-																for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
-																	{
-																	if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
-																		if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
-																			{
-																			if xxx >= 0 && yyy >=0
-																				other.grid_hit[xxx,yyy] = 1
-																			}
-																	}
-												}
-											}
-										}
+											
+										
 									}
 								}
 								scr_grid_refresh()
@@ -392,6 +368,7 @@ if state == "command" && team == team_player
 					}
 				
 				}
+			
 		
 			if mouse_check_button_pressed(mb_left)
 				{
@@ -465,54 +442,28 @@ if state == "command" && team == team_player
 						for (xx = xpos - move_range;xx <= xpos + move_range;xx++)
 							for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
 								{
-								with(par_wall)
+								if mp_grid_path_2x2(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
 									{
-									mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-									mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-									mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-									}
-								with(par_unit)
-									{
-									mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size)-1)
-									mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size),floor(y/ctrl_grid.grid_size)-1)
-									mp_grid_add_cell(ctrl_grid.grid,floor(x/ctrl_grid.grid_size)-1,floor(y/ctrl_grid.grid_size))
-									}
-								//top left position
-								if mp_grid_path(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
-									{
-									scr_grid_refresh()
 									if path_get_length(path1)/ctrl_grid.grid_size <= move_range
-									//top right position
-									if mp_grid_path(other.grid,path2,x+other.grid_size,y,(xx+1)*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
 										{
-										if path_get_length(path2)/ctrl_grid.grid_size <= move_range
-										//bottom left position
-										if mp_grid_path(other.grid,path3,x,y+other.grid_size,(xx)*other.grid_size+other.grid_size/2,(yy+1)*other.grid_size+other.grid_size/2,false)
-											{
-											if path_get_length(path3)/ctrl_grid.grid_size <= move_range
-											//bottom right position
-											if mp_grid_path(other.grid,path4,x+other.grid_size,y+other.grid_size,(xx+1)*other.grid_size+other.grid_size/2,(yy+1)*other.grid_size+other.grid_size/2,false)
-												{
-												if path_get_length(path4)/ctrl_grid.grid_size <= move_range
-													{
-													other.grid_mov[xx,yy] = 1
+										other.grid_mov[xx,yy] = 1
 													
-													//Set hittable positions
-													for (xp = xx; xp <= xx+1;xp++)
-														for (yp = yy; yp <= yy+1;yp++)
-															for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
-																for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
-																	{
-																	if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
-																		if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
-																			{
-																			if xxx>= 0 && yyy >= 0
-																				other.grid_hit[xxx,yyy] = 1
-																			}
-																	}
-													}
-												}
-											}
+										//Set hittable positions
+										for (xp = xx; xp <= xx+1;xp++)
+											for (yp = yy; yp <= yy+1;yp++)
+												for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
+													for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
+														{
+														if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
+															if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
+																{
+																if xxx>= 0 && yyy >= 0
+																	other.grid_hit[xxx,yyy] = 1
+																}
+														}
+													
+												
+											
 										}
 									}
 								}

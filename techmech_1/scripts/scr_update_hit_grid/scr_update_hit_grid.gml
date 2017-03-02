@@ -1,6 +1,7 @@
 with(ctrl_grid)
 	{
-	if parent == par_ride
+	var p = object_get_parent(current_unit.object_index)
+	if p == par_ride
 		{
 		scr_update_map()
 		scr_grid_refresh()
@@ -21,7 +22,7 @@ with(ctrl_grid)
 							}
 			
 		}
-	else if parent == par_unit
+	else if p == par_unit
 		{
 		with(current_unit)
 			{

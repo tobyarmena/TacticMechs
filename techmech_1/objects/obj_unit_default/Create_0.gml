@@ -18,7 +18,7 @@ sprite_run_down = spr_unit_default_run_down
 
 path = path_add()
 state = "wait"
-move_range = 4
+move_range = 8
 attack_range_max = 2
 attack_range_min = 1
 damage = 10

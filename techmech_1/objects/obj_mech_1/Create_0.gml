@@ -22,11 +22,11 @@ path2 = path_add()
 path3 = path_add()
 path4 = path_add()
 state = "ready"
-move_range = 8
+move_range = 4
 attack_range_max = 2
 attack_range_min = 1
 damage = 10
-team = 1
+team = 2
 hp = 100
 
 //get position in terms of grid
