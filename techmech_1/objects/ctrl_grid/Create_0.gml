@@ -1,13 +1,10 @@
-
 //initialize grid
-
 grid_size = 32
 grid_width = room_width/grid_size
 grid_height = room_height/grid_size
 
 
 //initialize grids
-
 grid = mp_grid_create(0, 0, grid_width, grid_height, grid_size, grid_size);
 
 for (xx = 0; xx < grid_width;xx+=1)
@@ -23,19 +20,13 @@ for (xx = 0; xx < grid_width;xx+=1)
 	}
 	
 //make all walls obstacles
-
 mp_grid_add_instances(grid,obj_wall,false)
 mp_grid_add_instances(grid, obj_path_wall, false);
-//with(obj_path_wall)
-	//instance_deactivate_object(obj_path_wall)
-	
 
 //Initialize states
-
 state = "command"
 
 //Initialize variables
-
 current_unit = noone
 grid_updated = false
 mouse_xx_check = 0
@@ -54,7 +45,6 @@ team_player = 1
 
 
 //Initialize team list
-
 team1 = ds_list_create()
 team2 = ds_list_create()
 

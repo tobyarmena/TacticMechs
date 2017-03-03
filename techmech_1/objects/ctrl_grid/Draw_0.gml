@@ -14,13 +14,20 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 		{
 		
 		//DEBUG GRID
+		var distance = sqrt(power((xx*grid_size-mouse_x),2)+power((yy*grid_size-mouse_y),2))
+		var alpha = max(0,1-distance*0.005)
+		draw_set_alpha(alpha)
+		if alpha>0
+			draw_sprite(spr_grid,0,xx*grid_size,yy*grid_size)
 		draw_set_alpha(0.3)
-		draw_sprite(spr_grid,0,xx*grid_size,yy*grid_size)
+		
+		
+		
 		draw_set_font(fnt_debug)
-		draw_text(xx*grid_size,yy*grid_size,string(grid_hit[xx,yy]))
-		draw_text(xx*grid_size,yy*grid_size+6,string(grid_mov[xx,yy]))
-		draw_text(xx*grid_size,yy*grid_size+12,string(grid_ai[xx,yy]))
-		draw_text(xx*grid_size,yy*grid_size+18,string(grid_occ[xx,yy]))
+		//draw_text(xx*grid_size,yy*grid_size,string(grid_hit[xx,yy]))
+		//draw_text(xx*grid_size,yy*grid_size+6,string(grid_mov[xx,yy]))
+		//draw_text(xx*grid_size,yy*grid_size+12,string(grid_ai[xx,yy]))
+		//draw_text(xx*grid_size,yy*grid_size+18,string(grid_occ[xx,yy]))
 		draw_set_font(fnt_menu)
 		draw_text(0,0,state)
 		draw_set_alpha(1)
@@ -116,7 +123,7 @@ if state == "unitchosen"
 		{
 		var mouse_xx = floor(mouse_x/grid_size)
 		var mouse_yy = floor(mouse_y/grid_size)
-		if grid_mov[mouse_xx,mouse_yy]  
+		if grid_mov[max(0,mouse_xx),max(0,mouse_yy)]  
 			{
 			if mouse_xx_check!= mouse_xx || mouse_yy_check != mouse_yy	
 				{

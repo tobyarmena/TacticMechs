@@ -1,5 +1,5 @@
 //Set movable and hittable positions positions for unit
-scr_update_map()
+scr_reset_movhit()
 with(current_unit)
 	{
 	scr_grid_refresh()

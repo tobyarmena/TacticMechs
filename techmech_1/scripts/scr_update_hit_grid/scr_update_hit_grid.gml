@@ -3,7 +3,7 @@ with(ctrl_grid)
 	var p = object_get_parent(current_unit.object_index)
 	if p == par_ride
 		{
-		scr_update_map()
+		scr_reset_movhit()
 		scr_grid_refresh()
 		
 		with(current_unit)

@@ -195,7 +195,6 @@ else
 //check if already in position
 if (gox == current_unit.xpos && goy == current_unit.ypos) || ((grid_occ[gox,goy] != noone)&&(grid_occ[gox,goy] != current_unit))
 	{
-	show_message("ride")
 	scr_ai_action()
 	}
 else

@@ -1,8 +1,8 @@
 {
-    "id": "a8b722b1-94e9-4654-a27b-6052d47606f8",
+    "id": "7e45910d-20d0-42c1-bc99-5835b5a704fd",
     "modelName": "GMScript",
     "mvc": "1.0",
-    "name": "scr_update_map",
+    "name": "scr_check_in_range",
     "IsCompatibility": false,
     "IsDnD": false
 }

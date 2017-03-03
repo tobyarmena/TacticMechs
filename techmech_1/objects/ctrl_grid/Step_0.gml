@@ -11,13 +11,11 @@ mouse_yyy = max(0,floor(mouse_y/grid_size))
 if state == "unitchosen" && team == team_player
 	{
 	if mouse_check_button_pressed(mb_left) && current_unit.state == "ready"
-		{
-		
+		{	
 		//move selected unit
-		
 		if mouse_xxx == current_unit.xpos && mouse_yyy == current_unit.ypos
 			{
-			scr_update_map()
+			scr_reset_movhit()
 			
 			scr_update_hit_grid()
 			with(current_unit)
@@ -33,21 +31,11 @@ if state == "unitchosen" && team == team_player
 			{
 			current_unit.state = "moving"
 			scr_move(current_unit,mouse_xxx,mouse_yyy)
-			
-			//empty movable position grid
-		
-			for (xx = 0 ; xx <= grid_width ; xx++)
-				for (yy = 0 ; yy <=  grid_height ; yy++)
-					{
-					grid_mov[xx,yy] = 0
-					grid_hit[xx,yy] = 0
-					}
+			scr_reset_movhit()
 			}
 		}
 		
-		
 	//This is what happens when unit is done moving
-	
 	with(current_unit)
 		{
 		if path_exists(path)
@@ -62,18 +50,15 @@ if state == "unitchosen" && team == team_player
 		}
 		
 	//choose an action to perform after movement
-	
 	if current_unit.state == "action"
 		{
 		if !instance_exists(obj_action_menu)
 			{
 			instance_create_layer(current_unit.x-64,current_unit.y-16,"Instances",obj_action_menu)
-			
 			}
 		}
 		
 	//Attack
-	
 	if current_unit.state == "attacking"
 		{
 		if mouse_check_button_pressed(mb_right)
@@ -141,7 +126,7 @@ if state == "ridechosen" && team == team_player
 		if mouse_xxx == current_unit.xpos && mouse_yyy == current_unit.ypos
 			{
 			//empty movable position grid
-			scr_update_map()
+			scr_reset_movhit()
 			
 			scr_update_hit_grid()
 			with(current_unit)
@@ -295,7 +280,7 @@ if state == "command" && team == team_player
 			if grid_updated = false && (grid_occ[mouse_xxx,mouse_yyy].state == "ready" || grid_occ[mouse_xxx,mouse_yyy].team != team_player) && parent == par_unit
 				{
 				grid_updated = true
-				scr_update_map()
+				scr_reset_movhit()
 				
 				with(grid_occ[mouse_xxx,mouse_yyy])
 					{
@@ -330,10 +315,9 @@ if state == "command" && team == team_player
 			//Update the grid to display movement of ride under the cursor
 			else if grid_updated = false && (grid_occ[mouse_xxx,mouse_yyy].state == "ready"|| grid_occ[mouse_xxx,mouse_yyy].team != team_player) && parent == par_ride
 				{
-				
 				grid_updated = true
 				//Set movable positions for unit
-				scr_update_map()	
+				scr_reset_movhit()	
 				with(grid_occ[mouse_xxx,mouse_yyy])
 					{
 					scr_grid_refresh_team(team)
@@ -355,7 +339,9 @@ if state == "command" && team == team_player
 														if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
 															{
 															if xxx >= 0 && yyy >=0
+																{
 																other.grid_hit[xxx,yyy] = 1
+																}
 															}
 													}
 												
@@ -363,7 +349,7 @@ if state == "command" && team == team_player
 										
 									}
 								}
-								scr_grid_refresh()
+								scr_grid_refresh_team(team)
 							}
 					}
 				
@@ -372,8 +358,6 @@ if state == "command" && team == team_player
 		
 			if mouse_check_button_pressed(mb_left)
 				{
-				
-				
 				//What happens when you press a unit
 				if grid_occ[mouse_xxx,mouse_yyy].state == "ready" && parent == par_unit
 					{
@@ -386,7 +370,7 @@ if state == "command" && team == team_player
 					temp_y = current_unit.y
 					
 					//Set movable and hittable positions positions for unit
-					scr_update_map()
+					scr_reset_movhit()
 					with(current_unit)
 						{
 						scr_grid_refresh()
@@ -404,12 +388,11 @@ if state == "command" && team == team_player
 										for (xxx = xx-attack_range_max;xxx <= xx+attack_range_max;xxx++)
 											for (yyy = yy-attack_range_max;yyy <= yy+attack_range_max;yyy++)
 												{
-												if abs(xxx-xx)+ abs(yyy-yy) <= attack_range_max
-													if abs(xxx-xx)+ abs(yyy-yy) >= attack_range_min
-														{
-														if xxx>=0 && yyy>=0
-															other.grid_hit[xxx,yyy] = 1
-														}
+												if scr_check_in_range(xxx,yyy,xx,yy,attack_range_min,attack_range_max)
+													{
+													if xxx>=0 && yyy>=0
+														other.grid_hit[xxx,yyy] = 1
+													}
 												}
 										
 										
@@ -423,9 +406,6 @@ if state == "command" && team == team_player
 				//what happens when you press a ride
 				else if grid_occ[mouse_xxx,mouse_yyy].state == "ready" && parent == par_ride
 					{
-					
-					
-					
 					//update current unit and switch game state
 					current_unit = grid_occ[mouse_xxx,mouse_yyy]
 					state = "ridechosen"
@@ -435,7 +415,7 @@ if state == "command" && team == team_player
 					temp_y = current_unit.y
 					
 					//Set movable positions for unit
-					scr_update_map()
+					scr_reset_movhit()
 					with(current_unit)
 						{
 						scr_grid_refresh()
@@ -454,16 +434,12 @@ if state == "command" && team == team_player
 												for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
 													for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
 														{
-														if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
-															if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
-																{
-																if xxx>= 0 && yyy >= 0
-																	other.grid_hit[xxx,yyy] = 1
-																}
+														if scr_check_in_range(xxx,yyy,xp,yp,attack_range_min,attack_range_max)
+															{
+															if xxx>= 0 && yyy >= 0
+																other.grid_hit[xxx,yyy] = 1
+															}
 														}
-													
-												
-											
 										}
 									}
 								}
@@ -477,7 +453,6 @@ if state == "command" && team == team_player
 			grid_updated = false
 			
 			//empty movable position grid
-		
 			for (xx = 0 ; xx <= grid_width ; xx++)
 				for (yy = 0 ; yy <=  grid_height ; yy++)
 					{

@@ -20,10 +20,13 @@ with(ctrl_grid)
 				{
 				if grid_occ[xx,yy] != noone
 					{
-					with(other)
+					if grid_occ[xx,yy].team != current_unit.team
 						{
-						option[1,0] = "attack"
-						option[1,1] = scr_attack
+						with(other)
+							{
+							option[1,0] = "attack"
+							option[1,1] = scr_attack
+							}
 						}
 					}
 				}

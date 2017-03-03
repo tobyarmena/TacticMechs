@@ -135,6 +135,14 @@
             }
         },
         {
+            "Key": "2737d15d-cfa5-47dc-9494-651ac6489216",
+            "Value": {
+                "id": "5b3a564d-723d-4390-ba6c-99b1f6a1e98f",
+                "resourcePath": "objects\\obj_camera_anchor\\obj_camera_anchor.yy",
+                "resourceType": "GMObject"
+            }
+        },
+        {
             "Key": "2a137b30-ec0a-4378-a9fa-c12ee3970145",
             "Value": {
                 "id": "4af96dfc-0908-4c2c-8033-877e067934fb",
@@ -196,6 +204,14 @@
                 "id": "73ec28a8-7b97-46af-b781-f90c8b30e896",
                 "resourcePath": "fonts\\fnt_menu\\fnt_menu.yy",
                 "resourceType": "GMFont"
+            }
+        },
+        {
+            "Key": "50edda30-0d57-4ada-8a9b-d4c4f499493f",
+            "Value": {
+                "id": "ce2146a8-5ae4-4a5a-b2b5-248b181bf105",
+                "resourcePath": "objects\\ctrl_display\\ctrl_display.yy",
+                "resourceType": "GMObject"
             }
         },
         {
@@ -303,6 +319,14 @@
             }
         },
         {
+            "Key": "7e45910d-20d0-42c1-bc99-5835b5a704fd",
+            "Value": {
+                "id": "2b5cd3fc-38cc-4685-8fe6-ea2804cc7191",
+                "resourcePath": "scripts\\scr_check_in_range\\scr_check_in_range.yy",
+                "resourceType": "GMScript"
+            }
+        },
+        {
             "Key": "7ea3f8b9-805c-46fb-89b3-f587311a865b",
             "Value": {
                 "id": "aa786797-dd83-4b36-b8d3-ee35f1b54f3f",
@@ -354,7 +378,7 @@
             "Key": "a8b722b1-94e9-4654-a27b-6052d47606f8",
             "Value": {
                 "id": "12d94462-36cb-4219-a680-00e9f5c57420",
-                "resourcePath": "scripts\\scr_update_map\\scr_update_map.yy",
+                "resourcePath": "scripts\\scr_reset_movhit\\scr_reset_movhit.yy",
                 "resourceType": "GMScript"
             }
         },
@@ -484,6 +508,14 @@
                 "id": "4e2339a4-bcd0-48d1-937e-6936bc24dfa5",
                 "resourcePath": "sprites\\spr_unit_default_run_left\\spr_unit_default_run_left.yy",
                 "resourceType": "GMSprite"
+            }
+        },
+        {
+            "Key": "ea54349d-6409-4430-a018-d5d71259197e",
+            "Value": {
+                "id": "be39ffdf-acae-42e2-9c93-31ead53f5b7a",
+                "resourcePath": "objects\\obj_camera\\obj_camera.yy",
+                "resourceType": "GMObject"
             }
         },
         {

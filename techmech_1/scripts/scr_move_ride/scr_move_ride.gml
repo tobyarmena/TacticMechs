@@ -7,7 +7,7 @@ with(argument0)
 	//Initiate path
 	
 	with(ctrl_grid)
-		scr_update_map()
+		scr_reset_movhit()
 	
 	with(par_wall)
 		{
