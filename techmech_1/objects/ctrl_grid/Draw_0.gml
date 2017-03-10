@@ -5,6 +5,9 @@ draw_set_alpha(1)
 	
 draw_text(0,128,"team: " + string(team))
 draw_text(0,144,"current unit: " + string(current_unit))
+if state == "unitchosen"
+draw_text(0,160,"current unit state: " + string(current_unit.state))
+draw_text(0,176,"game state: " + string(state))
 
 //Draw the grid
 
@@ -32,9 +35,36 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 		draw_text(0,0,state)
 		draw_set_alpha(1)
 		
+		if show_unsafe = true
+			{
+			
+			if grid_unsafe[xx,yy] == 1
+				{
+				draw_set_alpha(0.3)
+				draw_sprite(spr_unsafe_position,0,xx*grid_size,yy*grid_size)
+				draw_set_alpha(1)
+				}
+			}
+		
 		if team == team_player
 			{
-		
+			//draw interactable positions
+			if state == "ridechosen"
+				{
+				if current_unit.state == "unoccupying"
+					{
+					if grid_hit[xx,yy] == 1
+						{
+						draw_set_alpha(0.3)
+						draw_sprite(spr_interact_position,0,xx*grid_size,yy*grid_size)
+						draw_set_alpha(1)
+						
+						}
+					}
+				}
+			
+			
+			//draw available positions
 			if grid_mov[xx,yy] == 1
 				{
 				if state == "command"
@@ -176,7 +206,8 @@ else if state == "ridechosen"
 								current_unit.y, 
 								mouse_xxx*grid_size+grid_size/2, 
 								mouse_yyy*grid_size+grid_size/2, 
-								false)
+								false,
+								current_unit.team)
 				}
 			if path_exists(show_path)
 				{

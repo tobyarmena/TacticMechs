@@ -39,7 +39,7 @@ with(current_unit)
 			for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
 				{
 				
-				if mp_grid_path_2x2(other.grid,path,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
+				if mp_grid_path_2x2(other.grid,path,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false,team)
 					{
 					if path_get_length(path)/ctrl_grid.grid_size <= move_range
 						{

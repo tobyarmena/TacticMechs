@@ -5,7 +5,7 @@
 
 //draw sprite
 
-if state == "wait"
+if state == "wait" || state == "unoccupied"
 	{
 	draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_gray,1)
 	}
@@ -36,6 +36,7 @@ else
 
 //displaye state
 draw_text(x-10,y-24,state)
+draw_text(x-10,y-36,pilot)
 
 if state != "moving"
 	{

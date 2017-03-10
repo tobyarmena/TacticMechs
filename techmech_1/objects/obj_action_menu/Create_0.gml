@@ -4,12 +4,14 @@
 startx = x
 starty = y
 
+var num = 0
 
-
-option[0,0] = "wait"
-option[0,1] = scr_wait
+option[num,0] = "wait"
+option[num,1] = scr_wait
+num++
 
 //Check if attacking is an option
+var num_check = num
 with(ctrl_grid)
 	{
 	for(xx = 0 ; xx < grid_width ; xx += 1)
@@ -24,12 +26,58 @@ with(ctrl_grid)
 						{
 						with(other)
 							{
-							option[1,0] = "attack"
-							option[1,1] = scr_attack
+							if num_check == num	
+								{
+								option[num,0] = "attack"
+								option[num,1] = scr_attack
+								num++
+								}
 							}
 						}
 					}
 				}
+			}
+		}
+	}
+var num_check = num
+//check if occupying a vehicle is an option
+var unit = ctrl_grid.current_unit
+if object_get_parent(unit.object_index)== par_unit
+	{
+	for(xx=unit.xpos-1;xx<=unit.xpos+1;xx++)
+		for(yy=unit.ypos-1;yy<=unit.ypos+1;yy++)
+			{
+			if scr_check_in_range(unit.xpos,unit.ypos,xx,yy,1,1)
+				{
+				if ctrl_grid.grid_occ[xx,yy] != noone
+					{
+					if object_get_parent(ctrl_grid.grid_occ[xx,yy].object_index)== par_ride
+						{
+						if ctrl_grid.grid_occ[xx,yy].team == 0
+							{
+							if num_check == num	
+								{
+								option[num,0] = "occupy"
+								option[num,1] = scr_occupy
+								num++
+								}
+							}
+						}
+					}
+				}
+			}
+	}
+	
+//check if leaving a vehicle is an option
+if object_get_parent(unit.object_index)== par_ride
+	{
+	if unit.pilot != noone
+		{
+		if num_check == num	
+			{
+			option[num,0] = "unoccupy"
+			option[num,1] = scr_unoccupy
+			num++
 			}
 		}
 	}

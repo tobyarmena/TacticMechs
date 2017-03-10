@@ -1,5 +1,3 @@
-mp_grid_add_instances(grid, obj_path_wall, false);
-
 //store mouses position in terms of the grid
 mouse_xxx = max(0,floor(mouse_x/grid_size))
 mouse_yyy = max(0,floor(mouse_y/grid_size))
@@ -39,22 +37,47 @@ if state == "unitchosen" && team == team_player
 	with(current_unit)
 		{
 		if path_exists(path)
-			if path_position == 1
+			if path_position == 1 
 				{
-				path_position = 0 
-				state = "action"
-				other.grid_updated = false
-				other.action_complete = true
-				scr_update_hit_grid()
+				if state == "moving"
+					{
+					path_position = 0 
+					state = "action"
+				
+					other.grid_updated = false
+					other.action_complete = true
+					scr_update_hit_grid()
+					scr_update_unsafe_grid()
+					}
+				else if state == "entering"
+					{
+					state = "piloting"
+					team = 0
+					ds_list_delete(ctrl_grid.team1,ds_list_find_index(ctrl_grid.team1,id))
+					ds_list_add(ctrl_grid.team1,other.selected)
+					other.selected.team = 1
+					other.selected.state = "ready"
+					x = -32
+					y = -32
+					
+					path_position = 0 
+					other.state = "command"
+					other.current_unit = noone
+					other.grid_updated = false
+					other.action_complete = true
+					exit;
+					}
 				}
 		}
 		
 	//choose an action to perform after movement
 	if current_unit.state == "action"
 		{
+		obj_camera_anchor.x = current_unit.x
+		obj_camera_anchor.y = current_unit.y
 		if !instance_exists(obj_action_menu)
 			{
-			instance_create_layer(current_unit.x-64,current_unit.y-16,"Instances",obj_action_menu)
+			instance_create_layer(current_unit.x-64,current_unit.y-16,"GUI",obj_action_menu)
 			}
 		}
 		
@@ -74,6 +97,8 @@ if state == "unitchosen" && team == team_player
 					var target = grid_occ[mouse_xxx,mouse_yyy]
 					if target.team != current_unit.team
 						{
+						scr_initiate_battle(current_unit,target)
+						/*
 						target.hp -= 10
 						current_unit.state = "wait"
 						state = "command"
@@ -81,11 +106,52 @@ if state == "unitchosen" && team == team_player
 						grid_updated = false
 						action_complete = true
 						exit;
+						*/
 						}
 					}
 				}
 			}
 		}
+		
+	//Occupy a vehicle
+	if current_unit.state = "occupying"
+		{
+		if mouse_check_button_pressed(mb_right)
+			{
+			current_unit.state = "action"
+			}
+		
+		var target = grid_occ[mouse_xxx,mouse_yyy]
+		
+		if target != noone
+			{
+			if object_get_parent(target.object_index) == par_ride
+				{
+				for(xx = 0 ; xx < 2 ; xx ++)
+					for(yy = 0; yy < 2 ; yy ++)
+						{
+						var xxx = target.xpos+xx
+						var yyy = target.ypos+yy
+						if scr_check_in_range(xxx,yyy,current_unit.xpos,current_unit.ypos,1,1)
+							{
+							if instance_nearest(current_unit.x,current_unit.y,par_ride) == target
+								{
+								selected = target
+								if mouse_check_button_pressed(mb_left)
+									{
+									selected.pilot = current_unit
+									current_unit.state = "entering"
+									scr_move_scene(current_unit,xxx,yyy)
+									break;
+									}
+								}
+							}
+						}
+				}
+			} 
+		}
+		
+	
 		
 	//Cancel move
 	if mouse_check_button_pressed(mb_right)
@@ -141,7 +207,7 @@ if state == "ridechosen" && team == team_player
 		else if grid_mov[mouse_xxx,mouse_yyy] == 1
 			{
 			current_unit.state = "moving"
-			scr_move_ride(current_unit,mouse_xxx,mouse_yyy)
+			scr_move_ride(current_unit,mouse_xxx,mouse_yyy,current_unit.team)
 			
 			//empty movable position grid
 			for (xx = 0 ; xx <= grid_width ; xx++)
@@ -173,7 +239,7 @@ if state == "ridechosen" && team == team_player
 		{
 		if !instance_exists(obj_action_menu)
 			{
-			instance_create_layer(current_unit.x-64,current_unit.y-16,"Instances",obj_action_menu)
+			instance_create_layer(current_unit.x-64,current_unit.y-16,"GUI",obj_action_menu)
 			
 			}
 		}
@@ -207,6 +273,59 @@ if state == "ridechosen" && team == team_player
 					}
 				}
 			} 
+		}
+		
+	//unoccupy a vehicle
+	if current_unit.state == "unoccupying"
+		{
+		var posx 
+		var posy 
+		scr_update_hit_range(1,1,true)
+		if mouse_check_button_pressed(mb_left)
+			{
+			posx = mouse_xxx
+			posy = mouse_yyy
+			var initialx = -4
+			var initialy = -4
+			for(xx = current_unit.xpos;xx <= current_unit.xpos+1;xx++)
+				for (yy = current_unit.ypos;yy <= current_unit.ypos+1;yy++)
+					{
+					if scr_check_in_range(xx,yy,posx,posy,1,1)
+						{
+						initialx = xx
+						initialy = yy
+						
+						current_unit.pilot.x = initialx*grid_size+grid_size/2
+						current_unit.pilot.y = initialy*grid_size+grid_size/2
+						current_unit.pilot.state = "moving"
+						scr_move_scene(current_unit.pilot,posx,posy)
+						current_unit.pilot.xpos = posx
+						current_unit.pilot.ypos = posy
+						grid_occ[posx,posy] = current_unit.pilot
+						}
+					}
+			
+			
+			}
+		if current_unit.pilot.state == "moving" && current_unit.pilot.path_position ==1
+				{
+				current_unit.pilot.path_position = 0
+				
+				current_unit.pilot.state = "wait"	
+				current_unit.state = "unoccupied"
+				current_unit.pilot.team = 1
+				current_unit.team = 0
+				ds_list_add(team1,current_unit.pilot)
+				ds_list_delete(team1,ds_list_find_index(team1,current_unit))
+						
+				current_unit.pilot = noone
+						
+
+				state = "command"
+				current_unit = noone
+				grid_updated = false
+				action_complete = true
+				}
 		}
 		
 	//Cancel move
@@ -290,7 +409,7 @@ if state == "command" && team == team_player
 						for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
 							{
 							if mp_grid_path(other.grid,path,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
-								{
+								{	
 								if path_get_length(path)/ctrl_grid.grid_size <= move_range
 									{
 									other.grid_mov[xx,yy] = 1
@@ -324,30 +443,31 @@ if state == "command" && team == team_player
 					for (xx = xpos - move_range;xx <= xpos + move_range;xx++)
 						for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
 							{
-							if mp_grid_path_2x2(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
+							if mp_grid_path_2x2(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false,team)
 								{
-								if path_get_length(path1)/ctrl_grid.grid_size <= move_range
-									{
-									other.grid_mov[xx,yy] = 1	
-									//Set hittable positions
-									for (xp = xx; xp <= xx+1;xp++)
-										for (yp = yy; yp <= yy+1;yp++)
-											for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
-												for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
-													{
-													if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
-														if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
-															{
-															if xxx >= 0 && yyy >=0
+								if (other.grid_occ[xx+1,yy+1] == noone || other.grid_occ[xx+1,yy+1] == id) && (other.grid_occ[xx,yy+1] == noone || other.grid_occ[xx,yy+1] == id) && (other.grid_occ[xx+1,yy] == noone || other.grid_occ[xx+1,yy] == id) && (other.grid_occ[xx,yy] == noone || other.grid_occ[xx,yy] == id)
+									if path_get_length(path1)/ctrl_grid.grid_size <= move_range
+										{
+										other.grid_mov[xx,yy] = 1	
+										//Set hittable positions
+										for (xp = xx; xp <= xx+1;xp++)
+											for (yp = yy; yp <= yy+1;yp++)
+												for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
+													for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
+														{
+														if abs(xxx-xp)+ abs(yyy-yp) <= attack_range_max
+															if abs(xxx-xp)+ abs(yyy-yp) >= attack_range_min
 																{
-																other.grid_hit[xxx,yyy] = 1
+																if xxx >= 0 && yyy >=0
+																	{
+																	other.grid_hit[xxx,yyy] = 1
+																	}
 																}
-															}
-													}
+														}
 												
 											
 										
-									}
+										}
 								}
 								scr_grid_refresh_team(team)
 							}
@@ -367,7 +487,7 @@ if state == "command" && team == team_player
 					
 					//store position incase player cancels move
 					temp_x = current_unit.x
-					temp_y = current_unit.y
+					temp_y = current_unit.y 
 					
 					//Set movable and hittable positions positions for unit
 					scr_reset_movhit()
@@ -422,24 +542,27 @@ if state == "command" && team == team_player
 						for (xx = xpos - move_range;xx <= xpos + move_range;xx++)
 							for (yy = ypos - move_range;yy <= ypos + move_range;yy++)
 								{
-								if mp_grid_path_2x2(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false)
+								if mp_grid_path_2x2(other.grid,path1,x,y,xx*other.grid_size+other.grid_size/2,yy*other.grid_size+other.grid_size/2,false,team)
 									{
-									if path_get_length(path1)/ctrl_grid.grid_size <= move_range
+									if (other.grid_occ[xx+1,yy+1] == noone || other.grid_occ[xx+1,yy+1] == id) && (other.grid_occ[xx,yy+1] == noone || other.grid_occ[xx,yy+1] == id) && (other.grid_occ[xx+1,yy] == noone || other.grid_occ[xx+1,yy] == id) && (other.grid_occ[xx,yy] == noone || other.grid_occ[xx,yy] == id)
 										{
-										other.grid_mov[xx,yy] = 1
+										if path_get_length(path1)/ctrl_grid.grid_size <= move_range
+											{
+											other.grid_mov[xx,yy] = 1
 													
-										//Set hittable positions
-										for (xp = xx; xp <= xx+1;xp++)
-											for (yp = yy; yp <= yy+1;yp++)
-												for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
-													for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
-														{
-														if scr_check_in_range(xxx,yyy,xp,yp,attack_range_min,attack_range_max)
+											//Set hittable positions
+											for (xp = xx; xp <= xx+1;xp++)
+												for (yp = yy; yp <= yy+1;yp++)
+													for (xxx = xp-attack_range_max;xxx <= xp+attack_range_max;xxx++)
+														for (yyy = yp-attack_range_max;yyy <= yp+attack_range_max;yyy++)
 															{
-															if xxx>= 0 && yyy >= 0
-																other.grid_hit[xxx,yyy] = 1
+															if scr_check_in_range(xxx,yyy,xp,yp,attack_range_min,attack_range_max)
+																{
+																if xxx>= 0 && yyy >= 0
+																	other.grid_hit[xxx,yyy] = 1
+																}
 															}
-														}
+											}
 										}
 									}
 								}
@@ -501,6 +624,7 @@ if action_complete == true
 
 if phase_begin == true
 	{
+	scr_update_unsafe_grid()
 	phase_begin = false
 	
 	wait_count = 0
@@ -522,7 +646,14 @@ if phase_begin == true
 			{
 			with(ds_list_find_value(team1,i))
 				{
-				state = "ready"
+				var par = object_get_parent(id.object_index)
+				if par == par_unit
+					state = "ready"
+				else if par == par_ride
+					{
+					if pilot != noone
+						state = "ready"
+					}
 				}
 			}
 		}
@@ -543,7 +674,7 @@ if keyboard_check(vk_escape)
 	game_end()
 	
 	
-
+// khang nguyen wrote all this code 
 
 
 
@@ -593,6 +724,8 @@ if state == "unitchosen_ai"
 				other.grid_updated = false
 				other.action_complete = true
 				scr_update_hit_grid()
+				scr_update_unsafe_grid()
+				
 				}
 		}
 		
@@ -602,13 +735,13 @@ if state == "unitchosen_ai"
 		{
 		//check if target is in hit range
 		for (xx=0;xx<grid_width;xx++)
-			for (yy=0;yy<grid_width;yy++)
+			for (yy=0;yy<grid_height;yy++)
 				{
 				if grid_hit[xx,yy] == 1
 					{
 					if grid_occ[xx,yy] == victim
 						{
-						victim.hp -= 10
+						scr_initiate_battle(current_unit,grid_occ[xx,yy])
 						break;
 						}
 					}
@@ -620,7 +753,21 @@ if state == "unitchosen_ai"
 		action_complete = true
 		}
 	}
-
+	
+//Press Tab to show unsafe positions
+if keyboard_check_pressed(vk_tab)
+	{
+	if show_unsafe = false
+		{
+		show_unsafe = true
+		scr_update_unsafe_grid()
+		}
+	else 
+		{
+		show_unsafe = false
+		}
+	}
+	
 
 
 

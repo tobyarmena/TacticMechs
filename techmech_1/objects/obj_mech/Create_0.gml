@@ -21,13 +21,14 @@ path1 = path_add()
 path2 = path_add()
 path3 = path_add()
 path4 = path_add()
-state = "ready"
+state = "unoccupied"
 move_range = 8
 attack_range_max = 2
 attack_range_min = 1
 damage = 10
-team = 1
+team = 0
 hp = 100
+pilot = noone
 
 //get position in terms of grid
 xpos = floor(x/ctrl_grid.grid_size) 
@@ -41,6 +42,8 @@ ctrl_grid.grid_occ[xpos,ypos] = id
 ctrl_grid.grid_occ[x2pos,ypos] = id
 ctrl_grid.grid_occ[xpos,y2pos] = id
 ctrl_grid.grid_occ[x2pos,y2pos] = id
+
+
 
 
 

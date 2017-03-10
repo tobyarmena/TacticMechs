@@ -1,3 +1,6 @@
+if state != "piloting"
+{
+
 //draw_text(x+32,y,string(direction))
 
 //draw sprite
@@ -8,7 +11,7 @@ if state == "wait"
 	}
 else
 	{
-	if state == "moving"
+	if state == "moving" || state == "entering"
 		{
 		
 		image_speed = 6
@@ -33,6 +36,7 @@ else
 
 //displaye state
 draw_text(x-10,y-24,state)
+draw_text(x-10,y-34,team)
 
 if state != "moving"
 	{
@@ -59,3 +63,4 @@ if state != "moving"
 
 	draw_set_color(c_white)
 	}
+}

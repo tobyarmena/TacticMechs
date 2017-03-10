@@ -11,6 +11,8 @@ with(ctrl_grid)
 		teamlist = team1
 	else if argument0 == 2
 		teamlist = team2
+	else 
+		teamlist = team0
 		
 	for(i = 0;i < ds_list_size(teamlist);i++)
 		{
@@ -32,21 +34,7 @@ with(ctrl_grid)
 				mp_grid_clear_cell(grid,unit.xpos+1,unit.ypos+1)
 				}
 			}
-		/*
-		else if par == par_ride
-			{
-			var inst = grid_occ[mouse_xxx,mouse_yyy]
-			mp_grid_clear_cell(grid,inst.xpos,inst.ypos)
-			mp_grid_clear_cell(grid,inst.xpos+1,inst.ypos)
-			mp_grid_clear_cell(grid,inst.xpos,inst.ypos+1)
-			mp_grid_clear_cell(grid,inst.xpos+1,inst.ypos+1)
-			}
-		else if parent == par_unit
-			{
-			var inst = grid_occ[mouse_xxx,mouse_yyy]
-			mp_grid_clear_cell(grid,inst.xpos,inst.ypos)
-			}
-			*/
+		
 		}
 
 		

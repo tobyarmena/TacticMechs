@@ -142,7 +142,7 @@ for (xx = 0; xx < grid_width; xx++)
 			if par_me == par_unit
 				mp_grid_path(grid,check_path,startx,starty,endx,endy,false)
 			else if par_me == par_ride
-				mp_grid_path_2x2(grid,check_path,startx,starty,endx,endy,false)
+				mp_grid_path_2x2(grid,check_path,startx,starty,endx,endy,false,2)
 			if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
 				{
 				min_range = path_get_length(check_path)
@@ -154,7 +154,7 @@ for (xx = 0; xx < grid_width; xx++)
 
 //record the goal position on the ai grid
 for (xx = 0; xx < grid_width; xx++)
-	for (yy = 0; yy < grid_width; yy++)
+	for (yy = 0; yy < grid_height; yy++)
 		grid_ai[xx,yy] = 0
 grid_ai[goalx,goaly] = 2
 
@@ -166,22 +166,25 @@ if grid_mov[goalx,goaly] != 1
 	var endy = goaly*grid_size + grid_size/2
 	var min_range = 999999
 	for (xx = 0; xx < grid_width; xx++)
-		for (yy = 0; yy < grid_width; yy++)
+		for (yy = 0; yy < grid_height; yy++)
 			{
-			if grid_mov[xx,yy] == 1
+			if xx>=0 && yy>=0
 				{
-				var startx = xx*grid_size + grid_size/2
-				var starty = yy*grid_size + grid_size/2
-				if par_me == par_unit
-					mp_grid_path(grid,check_path,startx,starty,endx,endy,false)
-				else if par_me == par_ride
-					mp_grid_path_2x2(grid,check_path,startx,starty,endx,endy,false)
-					
-				if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
+				if grid_mov[xx,yy] == 1
 					{
-					min_range = path_get_length(check_path)
-					gox = xx
-					goy = yy
+					var startx = xx*grid_size + grid_size/2
+					var starty = yy*grid_size + grid_size/2
+					if par_me == par_unit
+						mp_grid_path(grid,check_path,startx,starty,endx,endy,false)
+					else if par_me == par_ride
+						mp_grid_path_2x2(grid,check_path,startx,starty,endx,endy,false,2)
+					
+					if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
+						{
+						min_range = path_get_length(check_path)
+						gox = xx
+						goy = yy
+						}
 					}
 				}
 			}
@@ -203,7 +206,7 @@ else
 	if par_me = par_unit
 		scr_move(current_unit,gox,goy)
 	else if par_me = par_ride
-		scr_move_ride(current_unit,gox,goy)
+		scr_move_ride(current_unit,gox,goy,current_unit.team)
 	}
 
 

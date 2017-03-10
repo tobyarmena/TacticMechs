@@ -1,3 +1,5 @@
+battle_object = obj_unit_default_1_battle
+
 //adjust the sprite position to match the grid
 
 sprite_set_offset(sprite_index,16,16)
@@ -21,7 +23,6 @@ attack_range_max = 2
 attack_range_min = 2
 damage = 10
 team = 2
-hp = 100
 
 //get position in terms of grid
 xpos = floor(x/ctrl_grid.grid_size) 
@@ -30,6 +31,14 @@ ypos = floor(y/ctrl_grid.grid_size)
 //Update position on grid
 
 ctrl_grid.grid_occ[xpos,ypos] = id
+
+//Stats
+hp = 30
+attack = 15
+defense = 7
+spd = 15
+finesse = 15
+tech = 5
 
 
 
