@@ -77,4 +77,5 @@ for (g = 0; g < ds_list_size(team2); g++)
 		}
 	
 	}
+scr_grid_refresh()
 }

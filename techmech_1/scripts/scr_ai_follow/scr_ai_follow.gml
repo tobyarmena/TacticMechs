@@ -143,12 +143,17 @@ for (xx = 0; xx < grid_width; xx++)
 				mp_grid_path(grid,check_path,startx,starty,endx,endy,false)
 			else if par_me == par_ride
 				mp_grid_path_2x2(grid,check_path,startx,starty,endx,endy,false,2)
-			if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
-				{
-				min_range = path_get_length(check_path)
-				goalx = xx
-				goaly = yy
-				}
+			var check_space = grid_occ[xx,yy] == noone 
+						&& grid_occ[xx+1,yy+1] == noone
+						&& grid_occ[xx,yy+1] == noone
+						&& grid_occ[xx+1,yy] == noone
+			if par_me == par_unit || (par_me = par_ride && check_space == true)
+				if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
+					{
+					min_range = path_get_length(check_path)
+					goalx = xx
+					goaly = yy
+					}
 			}
 		}	
 
@@ -178,13 +183,19 @@ if grid_mov[goalx,goaly] != 1
 						mp_grid_path(grid,check_path,startx,starty,endx,endy,false)
 					else if par_me == par_ride
 						mp_grid_path_2x2(grid,check_path,startx,starty,endx,endy,false,2)
+						
+					var check_space = grid_occ[xx,yy] == noone 
+						&& grid_occ[xx+1,yy+1] == noone
+						&& grid_occ[xx,yy+1] == noone
+						&& grid_occ[xx+1,yy] == noone
 					
-					if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
-						{
-						min_range = path_get_length(check_path)
-						gox = xx
-						goy = yy
-						}
+					if par_me == par_unit || (par_me == par_ride && check_space == true) 	
+						if path_get_length(check_path) < min_range && path_get_length(check_path) != 0
+							{
+							min_range = path_get_length(check_path)
+							gox = xx
+							goy = yy
+							}
 					}
 				}
 			}

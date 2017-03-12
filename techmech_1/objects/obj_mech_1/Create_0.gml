@@ -1,4 +1,4 @@
-battle_object = obj_unit_default_battle
+battle_object = obj_unit_default_2_battle
 
 image_alpha = 0.4
 

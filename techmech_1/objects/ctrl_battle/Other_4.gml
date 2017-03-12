@@ -44,5 +44,7 @@ if room == return_room
 			scr_kill(attacker)
 		if defender_hp <= 0
 			scr_kill(defender)
+		
 		}
+	
 	}

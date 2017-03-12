@@ -1,5 +1,7 @@
 image_alpha = 0.4
 
+battle_object = obj_unit_default_3_battle
+
 //adjust the sprite position to match the grid
 
 sprite_set_offset(sprite_index,16,16)
@@ -42,6 +44,14 @@ ctrl_grid.grid_occ[xpos,ypos] = id
 ctrl_grid.grid_occ[x2pos,ypos] = id
 ctrl_grid.grid_occ[xpos,y2pos] = id
 ctrl_grid.grid_occ[x2pos,y2pos] = id
+
+//Stats
+hp = 30
+attack = 20
+defense = 7
+spd = 15
+finesse = 15
+tech = 5
 
 
 

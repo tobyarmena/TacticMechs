@@ -32,8 +32,10 @@ if room = rm_simulate_battle
 	draw_rectangle(max(b2_x1,b2_xx2),b2_y1,b2_x2,b2_y2,false)
 	
 	draw_set_color(c_red)
-	draw_rectangle(b1_x1,b1_y1,max(b1_x1,b1_xx2),b1_y2,false)
-	draw_rectangle(b2_x1,b2_y1,max(b2_x1,b2_xx2),b2_y2,false)
+	if ratio_attack > 0
+		draw_rectangle(b1_x1,b1_y1,max(b1_x1,b1_xx2),b1_y2,false)
+	if ratio_defend > 0
+		draw_rectangle(b2_x1,b2_y1,max(b2_x1,b2_xx2),b2_y2,false)
 	
 	
 	draw_set_color(c_white)

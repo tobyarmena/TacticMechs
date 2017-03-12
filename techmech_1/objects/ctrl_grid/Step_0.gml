@@ -173,7 +173,7 @@ if state == "unitchosen" && team == team_player
 			grid_updated = false
 			action_complete = true
 			
-			
+			scr_update_unsafe_grid()
 			
 			exit;
 			}
@@ -261,14 +261,7 @@ if state == "ridechosen" && team == team_player
 					var target = grid_occ[mouse_xxx,mouse_yyy]
 					if target.team != current_unit.team
 						{
-						target.hp -= 10
-						grid_occ[mouse_xxx,mouse_yyy].hp -= 10
-						current_unit.state = "wait"
-						state = "command"
-						current_unit = noone
-						grid_updated = false
-						action_complete = true
-						exit;
+						scr_initiate_battle(current_unit,target)
 						}
 					}
 				}
@@ -624,6 +617,7 @@ if action_complete == true
 
 if phase_begin == true
 	{
+	state = "phase"
 	scr_update_unsafe_grid()
 	phase_begin = false
 	
@@ -667,6 +661,65 @@ if phase_begin == true
 				}
 			}
 		}
+		
+	//find the medium camera position
+	var totalx = 0
+	var totaly = 0
+	var medx
+	var medy
+	
+	for (i = 0; i < ds_list_size(team1); i++)
+		{
+		totalx+= ds_list_find_value(team1,i).x
+		totaly+= ds_list_find_value(team1,i).y
+		}
+	for (i = 0; i < ds_list_size(team2); i++)
+		{
+		totalx+= ds_list_find_value(team2,i).x
+		totaly+= ds_list_find_value(team2,i).y
+		}
+	medx = totalx/(ds_list_size(team1)+ds_list_size(team2))
+	medy = totaly/(ds_list_size(team1)+ds_list_size(team2))
+	obj_camera_anchor.x = medx
+	obj_camera_anchor.y = medy
+	ctrl_display.zoom_level = 2
+		
+		
+	
+	}
+	
+	
+//Transitioning between turns
+if state == "phase"
+	{
+	
+	
+	if keyboard_check_pressed(vk_space)
+		{
+		state = "command"
+		//find the medium camera position
+		var totalx = 0
+		var totaly = 0
+		var medx
+		var medy
+		if team == 1
+			{
+			for (i = 0; i < ds_list_size(team1); i++)
+				{
+				totalx+= ds_list_find_value(team1,i).x
+				totaly+= ds_list_find_value(team1,i).y
+				}
+			medx = totalx/ds_list_size(team1)
+			medy = totaly/ds_list_size(team1)
+			obj_camera_anchor.x = medx
+			obj_camera_anchor.y = medy
+			ctrl_display.zoom_level = 1
+			}
+		if team == 2
+			{
+			ctrl_display.zoom_level = 1
+			}
+		}
 	}
 	
 	
@@ -674,10 +727,6 @@ if keyboard_check(vk_escape)
 	game_end()
 	
 	
-// khang nguyen wrote all this code 
-
-
-
 
 ///ENEMY AI
 
@@ -704,6 +753,8 @@ if state == "command" && team != team_player
 
 if state == "unitchosen_ai"
 	{
+	obj_camera_anchor.x = current_unit.x
+	obj_camera_anchor.y = current_unit.y
 	//choose a random target
 	var victim = ds_list_find_value(team1,0)
 	if current_unit.state == "ready"
@@ -741,8 +792,9 @@ if state == "unitchosen_ai"
 					{
 					if grid_occ[xx,yy] == victim
 						{
+						current_unit.state = "attacking"
 						scr_initiate_battle(current_unit,grid_occ[xx,yy])
-						break;
+						exit;
 						}
 					}
 				}
@@ -751,6 +803,7 @@ if state == "unitchosen_ai"
 		current_unit = noone
 		grid_updated = false
 		action_complete = true
+		
 		}
 	}
 	
