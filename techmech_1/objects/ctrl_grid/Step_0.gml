@@ -367,6 +367,8 @@ if state == "command" && team == team_player
 			state = "wait"
 		with(par_ride)
 			state = "wait"
+		state = "command"
+		action_complete = true
 		exit;
 		}
 	
