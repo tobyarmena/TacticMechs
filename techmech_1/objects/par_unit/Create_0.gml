@@ -8,3 +8,6 @@ else if team == 2
 	ds_list_add(ctrl_grid.team2,id)
 	
 maxhp = hp
+
+coverer = noone
+covering = false

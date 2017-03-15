@@ -1,8 +1,11 @@
 if room == rm_simulate_battle
 	{
 	
-	state = "attack"
-
+	if coverer == noone
+		state = "attack"
+	else
+		state = "cover"
+	
 	return_room = room_1
 
 	next_action = false
@@ -25,6 +28,8 @@ if room == rm_simulate_battle
 		{
 		instance_create_layer(176,623,"Instances",defender_object)
 		instance_create_layer(844,623,"Instances",attacker_object)
+		if coverer_object != noone
+			instance_create_layer(100,623,"Instances",coverer_object)
 		with(attacker_object)
 			{
 			image_xscale = -1
@@ -48,3 +53,8 @@ if room == return_room
 		}
 	
 	}
+	
+with(attacker_object){state = "idle"}
+with(defender_object){state = "idle"}
+if coverer != noone
+	with(coverer_object){state = "idle"}

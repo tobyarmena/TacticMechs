@@ -8,7 +8,8 @@
         "0b6187bf-6800-4ca5-bd4b-abb8a4c2952e",
         "b4f397ad-8642-4c58-af1e-f1f9446abc62",
         "a8a14e23-a363-40a1-b264-4f93142bc3fe",
-        "e7543bba-01a3-41b5-baf1-3b68e01f46d2"
+        "e7543bba-01a3-41b5-baf1-3b68e01f46d2",
+        "e058ad0f-5cf4-45e1-8443-8f60b9d7af78"
     ],
     "filterType": "GMObject",
     "folderName": "Unit's Battle Objects",

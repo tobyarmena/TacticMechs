@@ -98,19 +98,37 @@ if state == "unitchosen" && team == team_player
 					if target.team != current_unit.team
 						{
 						scr_initiate_battle(current_unit,target)
-						/*
-						target.hp -= 10
-						current_unit.state = "wait"
-						state = "command"
-						current_unit = noone
-						grid_updated = false
-						action_complete = true
-						exit;
-						*/
 						}
 					}
 				}
 			}
+		}
+		
+	//Covering
+
+	if current_unit.state = "covering"
+		{
+		if mouse_check_button_pressed(mb_right)
+			{
+			current_unit.state = "action"
+			}
+		if mouse_check_button_pressed(mb_left)
+			{
+			if grid_hit[mouse_xxx,mouse_yyy] == 1
+				{
+				if grid_occ[mouse_xxx,mouse_yyy] != noone
+					{
+					var target = grid_occ[mouse_xxx,mouse_yyy]
+					if target.team == current_unit.team && target.state == "wait" && target.covering == false && target.coverer == noone
+						{
+						target.coverer = current_unit.id
+						current_unit.covering = true
+						scr_wait()
+						exit;
+						}
+					}
+				}
+			} 
 		}
 		
 	//Occupy a vehicle
@@ -262,6 +280,33 @@ if state == "ridechosen" && team == team_player
 					if target.team != current_unit.team
 						{
 						scr_initiate_battle(current_unit,target)
+						}
+					}
+				}
+			} 
+		}
+		
+	//Covering
+
+	if current_unit.state = "covering"
+		{
+		if mouse_check_button_pressed(mb_right)
+			{
+			current_unit.state = "action"
+			}
+		if mouse_check_button_pressed(mb_left)
+			{
+			if grid_hit[mouse_xxx,mouse_yyy] == 1
+				{
+				if grid_occ[mouse_xxx,mouse_yyy] != noone
+					{
+					var target = grid_occ[mouse_xxx,mouse_yyy]
+					if target.team == current_unit.team && target.state == "wait" && target.covering == false && target.coverer == noone
+						{
+						target.coverer = current_unit.id
+						current_unit.covering = true
+						scr_wait()
+						exit;
 						}
 					}
 				}
@@ -652,6 +697,24 @@ if phase_begin == true
 					}
 				}
 			}
+			
+		//reset covering units
+		with(par_unit)
+			{
+			if team == 1
+				{
+				coverer = noone
+				covering = false
+				}
+			}
+		with(par_ride)
+			{
+			if team == 1
+				{
+				coverer = noone
+				covering = false
+				}
+			}
 		}
 	else if team == 2
 		{
@@ -660,6 +723,23 @@ if phase_begin == true
 			with(ds_list_find_value(team2,i))
 				{
 				state = "ready"
+				}
+			}
+		//reset covering units
+		with(par_unit)
+			{
+			if team == 2
+				{
+				coverer = noone
+				covering = false
+				}
+			}
+		with(par_ride)
+			{
+			if team == 2
+				{
+				coverer = noone
+				covering = false
 				}
 			}
 		}
@@ -686,7 +766,7 @@ if phase_begin == true
 	obj_camera_anchor.y = medy
 	ctrl_display.zoom_level = 2
 		
-		
+	
 	
 	}
 	

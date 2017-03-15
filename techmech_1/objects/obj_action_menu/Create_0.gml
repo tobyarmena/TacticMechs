@@ -81,7 +81,35 @@ if object_get_parent(unit.object_index)== par_ride
 			}
 		}
 	}
-
+//Check if covering is an option
+var num_check = num
+with(ctrl_grid)
+	{
+	for(xx = 0 ; xx < grid_width ; xx += 1)
+		{
+		for(yy = 0 ; yy < grid_height ; yy += 1)
+			{
+			if grid_hit[xx,yy] == 1
+				{
+				if grid_occ[xx,yy] != noone
+					{
+					if grid_occ[xx,yy].team == current_unit.team && grid_occ[xx,yy].covering = false && grid_occ[xx,yy].coverer == noone && grid_occ[xx,yy].state == "wait"
+						{
+						with(other)
+							{
+							if num_check == num	
+								{
+								option[num,0] = "cover"
+								option[num,1] = scr_cover
+								num++
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 
 draw_set_font(fnt_menu)

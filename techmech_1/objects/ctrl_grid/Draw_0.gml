@@ -102,12 +102,14 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 					}
 				else if state == "unitchosen" 
 					{
-					if current_unit.state == "ready" || current_unit.state == "attacking"
+					if current_unit.state == "attacking" || current_unit.state == "ready" 
 						draw_sprite(spr_attackable_position,0,xx*grid_size,yy*grid_size)
+					else if current_unit.state == "covering"
+						draw_sprite(spr_interact_position,0,xx*grid_size,yy*grid_size)
 					}
 				else if state == "ridechosen"
 					{
-					if current_unit.state == "ready" || current_unit.state == "attacking"
+					if current_unit.state == "attacking"
 						{
 						if grid_mov[max(0,xx-1),max(0,yy-1)] != 1
 							if grid_mov[max(0,xx-1),max(0,yy)] != 1
@@ -230,6 +232,15 @@ else if state == "ridechosen"
 					}
 				}
 			}
+		}
+	}
+with(par_unit)
+	{
+	if coverer != noone
+		{
+		draw_set_color(c_green)
+		draw_line(x,y,coverer.x,coverer.y)
+		draw_set_color(c_white)
 		}
 	}
 	

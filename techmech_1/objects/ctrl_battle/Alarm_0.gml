@@ -1,9 +1,28 @@
-with(attacker_object)
+if coverer == noone
 	{
-	state = "attacking"
-	sprite_index = spr_attack
+	with(attacker_object)
+		{
+		state = "attacking"
+		sprite_index = spr_attack
+		}
+	with(defender_object)
+		{
+		state = "defending"
+		}
 	}
-with(defender_object)
+else
 	{
-	state = "defending"
+	with(coverer_object)
+		{
+		state = "attacking"
+		sprite_index = spr_attack
+		}
+	with(attacker_object)
+		{
+		state = "defending"
+		}
+	with(defender_object)
+		{
+		state = "idle"
+		}
 	}

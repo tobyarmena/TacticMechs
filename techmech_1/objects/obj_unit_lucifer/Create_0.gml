@@ -1,4 +1,4 @@
-battle_object = obj_unit_default_battle
+battle_object = obj_unit_default_4_battle
 
 //adjust the sprite position to match the grid
 
