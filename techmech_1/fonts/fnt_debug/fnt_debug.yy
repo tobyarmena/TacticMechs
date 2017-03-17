@@ -1449,6 +1449,7 @@
             "y": 127
         }
     ],
+    "sampleText": null,
     "size": 6,
     "styleName": "Regular",
     "textureGroup": 0

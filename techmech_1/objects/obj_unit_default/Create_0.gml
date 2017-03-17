@@ -20,7 +20,7 @@ path = path_add()
 state = "wait"
 move_range = 8
 attack_range_max = 2
-attack_range_min = 1
+attack_range_min = 2
 damage = 30
 team = 1
 

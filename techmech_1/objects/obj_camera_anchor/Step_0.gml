@@ -1,3 +1,5 @@
+//x = clamp(x,camera_get_view_width(ctrl_display.camera)/2,room_width-camera_get_view_width(ctrl_display.camera)/2)
+//y = clamp(y,camera_get_view_width(ctrl_display.camera)/2,room_width-camera_get_view_width(ctrl_display.camera)/2)
 //move anchor based on controls
 
 //set keys
@@ -21,8 +23,9 @@ else if d{dir = 0}
 //move in direction
 if w||a||s||d
 	{
-	x += lengthdir_x(move_speed,dir)
-	y += lengthdir_y(move_speed,dir)
+	
+	x = clamp(x+lengthdir_x(move_speed,dir),camera_get_view_width(ctrl_display.camera)/2,room_width-camera_get_view_width(ctrl_display.camera)/2)
+	y = clamp(y+lengthdir_y(move_speed,dir),camera_get_view_width(ctrl_display.camera)/2,room_width-camera_get_view_width(ctrl_display.camera)/2)
 	}
 
 

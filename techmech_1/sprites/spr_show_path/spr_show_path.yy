@@ -53,14 +53,15 @@
             "visible": true
         }
     ],
-    "origin": 3,
+    "origin": 5,
     "playbackSpeed": 15,
     "playbackSpeedType": 0,
     "sepmasks": false,
     "swatchColours": null,
+    "swfPrecision": 0,
     "textureGroup": 0,
     "type": 0,
     "width": 16,
-    "xorig": 0,
+    "xorig": 15,
     "yorig": 8
 }

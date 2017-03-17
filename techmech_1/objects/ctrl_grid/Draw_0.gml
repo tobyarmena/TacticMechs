@@ -109,7 +109,7 @@ for(xx = 0 ; xx < grid_width ; xx += 1)
 					}
 				else if state == "ridechosen"
 					{
-					if current_unit.state == "attacking"
+					if current_unit.state == "attacking" || current_unit.state == "ready" 
 						{
 						if grid_mov[max(0,xx-1),max(0,yy-1)] != 1
 							if grid_mov[max(0,xx-1),max(0,yy)] != 1
@@ -167,21 +167,46 @@ if state == "unitchosen"
 			if path_exists(show_path)
 				{
 				var node_amount = path_get_length(show_path)/8
-				for (i=0;i<path_get_number(show_path)-1;i++)
+				for (i=0;i<path_get_number(show_path);i++)
 					{
 					var xx = path_get_point_x(show_path,i)
 					var yy = path_get_point_y(show_path,i)
 					var xxnext = path_get_point_x(show_path,i+1)
 					var yynext = path_get_point_y(show_path,i+1)
-					var color = make_colour_rgb(0, 113, 188);
-					if i == path_get_number(show_path)-2
+					var xxprev = path_get_point_x(show_path,max(0,i-1))
+					var yyprev = path_get_point_y(show_path,max(0,i-1))
+					var dir1 = point_direction(xxprev,yyprev,xx,yy)
+					var dir2 = point_direction(xx,yy,xxnext,yynext)
+					var ind = 0 
+					if i == 0
 						{
-						var dir = point_direction(xx,yy,xxnext,yynext)
-						draw_sprite_ext(spr_show_path,0,xxnext,yynext,1,1,dir,c_white,0.5)
+						if dir2 == 0 || dir1 == 360 {ind = 10}
+						else if dir2 == 90 {ind = 11}
+						else if dir2 == 180 {ind = 12}
+						else if dir2 == 270{ind = 13}
 						}
-					draw_set_alpha(0.5)
-					draw_line_width_color(xx,yy,xxnext,yynext,8,color,color)
-					draw_set_alpha(1)
+					else if i == path_get_number(show_path)-1
+						{
+						if dir1 == 0 || dir1 == 360 {ind = 6}
+						else if dir1 == 270 {ind = 7}
+						else if dir1 == 180 {ind = 8}
+						else if dir1 == 90 {ind = 9}
+						}
+					else 
+						{
+						if (dir1 == 0 || dir1 == 360) && (dir2 == 0 || dir2 == 360){ind = 0}
+						else if (dir1 == 90 || dir1 == 270) && (dir2 == 90 || dir2 == 270){ind = 1}
+						else if (dir1 == 0 || dir2 == 360) && (dir2 == 90){ind = 2}
+						else if (dir1 == 270) && (dir2 == 180){ind = 2}
+						else if (dir1 == 270) && (dir2 == 0 || dir2 == 360){ind = 3}
+						else if (dir1 == 180) && (dir2 == 90){ind = 3}
+						else if (dir1 == 90) && (dir2 == 0 || dir2 == 360){ind = 4}
+						else if (dir1 == 180) && (dir2 == 270){ind = 4}
+						else if (dir1 == 90) && (dir2 == 180){ind = 5}
+						else if (dir1 == 0 || dir1 == 360) && (dir2 == 270){ind = 5}
+						}
+					draw_sprite_ext(spr_arrow,ind,xx,yy,1,1,0,c_white,0.5)
+					//draw_text(xx,yy,string(dir1) + " " +string(dir2))
 					}
 				}
 			}
@@ -214,21 +239,46 @@ else if state == "ridechosen"
 			if path_exists(show_path)
 				{
 				var node_amount = path_get_length(show_path)/8
-				for (i=0;i<path_get_number(show_path)-1;i++)
+				for (i=0;i<path_get_number(show_path);i++)
 					{
 					var xx = path_get_point_x(show_path,i)
 					var yy = path_get_point_y(show_path,i)
 					var xxnext = path_get_point_x(show_path,i+1)
 					var yynext = path_get_point_y(show_path,i+1)
-					var color = make_colour_rgb(0, 113, 188);
-					if i == path_get_number(show_path)-2
+					var xxprev = path_get_point_x(show_path,max(0,i-1))
+					var yyprev = path_get_point_y(show_path,max(0,i-1))
+					var dir1 = point_direction(xxprev,yyprev,xx,yy)
+					var dir2 = point_direction(xx,yy,xxnext,yynext)
+					var ind = 0 
+					if i == 0
 						{
-						var dir = point_direction(xx,yy,xxnext,yynext)
-						draw_sprite_ext(spr_show_path,0,xxnext+grid_size/2,yynext+grid_size/2,1,1,dir,c_white,0.5)
+						if dir2 == 0 || dir1 == 360 {ind = 10}
+						else if dir2 == 90 {ind = 11}
+						else if dir2 == 180 {ind = 12}
+						else if dir2 == 270{ind = 13}
 						}
-					draw_set_alpha(0.5)
-					draw_line_width_color(xx+grid_size/2,yy+grid_size/2,xxnext+grid_size/2,yynext+grid_size/2,8,color,color)
-					draw_set_alpha(1)
+					else if i == path_get_number(show_path)-1
+						{
+						if dir1 == 0 || dir1 == 360 {ind = 6}
+						else if dir1 == 270 {ind = 7}
+						else if dir1 == 180 {ind = 8}
+						else if dir1 == 90 {ind = 9}
+						}
+					else 
+						{
+						if (dir1 == 0 || dir1 == 360) && (dir2 == 0 || dir2 == 360){ind = 0}
+						else if (dir1 == 90 || dir1 == 270) && (dir2 == 90 || dir2 == 270){ind = 1}
+						else if (dir1 == 0 || dir2 == 360) && (dir2 == 90){ind = 2}
+						else if (dir1 == 270) && (dir2 == 180){ind = 2}
+						else if (dir1 == 270) && (dir2 == 0 || dir2 == 360){ind = 3}
+						else if (dir1 == 180) && (dir2 == 90){ind = 3}
+						else if (dir1 == 90) && (dir2 == 0 || dir2 == 360){ind = 4}
+						else if (dir1 == 180) && (dir2 == 270){ind = 4}
+						else if (dir1 == 90) && (dir2 == 180){ind = 5}
+						else if (dir1 == 0 || dir1 == 360) && (dir2 == 270){ind = 5}
+						}
+					draw_sprite_ext(spr_arrow,ind,xx+16,yy+16,1,1,0,c_white,0.5)
+					//draw_text(xx,yy,string(dir1) + " " +string(dir2))
 					}
 				}
 			}

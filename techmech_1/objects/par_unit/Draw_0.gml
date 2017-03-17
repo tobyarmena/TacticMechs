@@ -5,33 +5,46 @@ if state != "piloting"
 
 //draw sprite
 
-if state == "wait"
+
+if state == "moving" || state == "entering"
 	{
-	draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_gray,1)
+		
+	image_speed = 6
+	var sprite = sprite_run_right
+	if direction == 90 
+		{
+		image_speed = 0.8
+		if sprite_index != sprite_run_up
+			sprite_index = sprite_run_up
+		}
+	else if direction == 180
+		{
+		image_speed = 0.8
+		if sprite_index != sprite_run_left
+			sprite_index = sprite_run_left
+		}
+	else if direction == 270
+		{
+		image_speed = 0.8
+		if sprite_index != sprite_run_down
+			sprite_index = sprite_run_down
+		}
+	else if direction == 0 || direction == 360
+		{
+		image_speed = 0.8
+		if sprite_index != sprite_run_right
+			sprite_index = sprite_run_right
+		}
+	draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_white,1)
 	}
 else
 	{
-	if state == "moving" || state == "entering"
-		{
-		
-		image_speed = 6
-		var sprite = sprite_run_right
-		if direction == 90 
-			sprite = sprite_run_up
-		else if direction == 180
-			sprite = sprite_run_left
-		else if direction == 270
-			sprite = sprite_run_down
-		else if direction == 0 || direction == 360
-			sprite = sprite_run_right
-		draw_sprite_stretched_ext(sprite,image_index,x-16,y-16,sprite_width,sprite_height,c_white,1)
-		}
-	else
-		{
-		image_speed = 3
-		draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_white,1)
-		}
+	if sprite_index != sprite_idle
+			sprite_index = sprite_idle
+	image_speed = 1
+	draw_sprite_stretched_ext(sprite_index,image_index,x-16,y-16,sprite_width,sprite_height,c_white,1)
 	}
+	
 
 
 //displaye state

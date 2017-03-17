@@ -6,11 +6,11 @@
     "For3D": false,
     "HTile": false,
     "VTile": false,
-    "bbox_bottom": 31,
-    "bbox_left": 0,
-    "bbox_right": 31,
-    "bbox_top": 0,
-    "bboxmode": 0,
+    "bbox_bottom": 4,
+    "bbox_left": 2,
+    "bbox_right": 3,
+    "bbox_top": 3,
+    "bboxmode": 2,
     "colkind": 1,
     "coltolerance": 0,
     "frames": [
@@ -61,6 +61,13 @@
                     "mvc": "1.0",
                     "FrameId": "6c1e586e-3451-48e4-af8f-7f4487af888c",
                     "LayerId": "9492993a-e650-4e34-b298-166dc28a6b56"
+                },
+                {
+                    "id": "0363ef24-a539-4ed6-8d6b-3e90685f5b0c",
+                    "modelName": "GMSpriteImage",
+                    "mvc": "1.0",
+                    "FrameId": "6c1e586e-3451-48e4-af8f-7f4487af888c",
+                    "LayerId": "8886064e-35c0-4f7d-b0b4-05f846ca4001"
                 }
             ]
         },
@@ -111,6 +118,13 @@
                     "mvc": "1.0",
                     "FrameId": "c3b6622b-545d-4e73-80d9-60235c330dd9",
                     "LayerId": "0fe1ab10-cf35-45f6-9d3f-9bb4d8810ed7"
+                },
+                {
+                    "id": "fd986e7e-eb5f-4f1f-afeb-1bfdf46187f1",
+                    "modelName": "GMSpriteImage",
+                    "mvc": "1.0",
+                    "FrameId": "c3b6622b-545d-4e73-80d9-60235c330dd9",
+                    "LayerId": "8886064e-35c0-4f7d-b0b4-05f846ca4001"
                 }
             ]
         }
@@ -119,6 +133,17 @@
     "gridY": 0,
     "height": 32,
     "layers": [
+        {
+            "id": "8886064e-35c0-4f7d-b0b4-05f846ca4001",
+            "modelName": "GMImageLayer",
+            "mvc": "1.0",
+            "SpriteId": "3d19bc4e-a191-497c-85f8-c1faa7d43d57",
+            "blendMode": 0,
+            "isLocked": false,
+            "name": "Layer 1",
+            "opacity": 100,
+            "visible": true
+        },
         {
             "id": "29ba5e30-b3a5-4b52-b1e7-1fe5a8488b79",
             "modelName": "GMImageLayer",

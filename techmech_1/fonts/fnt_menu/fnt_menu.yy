@@ -2016,6 +2016,7 @@
             "y": 127
         }
     ],
+    "sampleText": null,
     "size": 12,
     "styleName": "Regular",
     "textureGroup": 0

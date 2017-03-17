@@ -1,6 +1,6 @@
 //center the camera
-x = 500
-y = 500
+x = room_width/2
+y = room_height/2
 
 //move speed
 move_speed = 20

@@ -7,12 +7,12 @@ x+=16
 y+=16
 
 //Set sprites
-
-sprite_idle = spr_unit_lucifer
-sprite_run_right = spr_unit_default_run_right
-sprite_run_left = spr_unit_default_run_left
-sprite_run_up = spr_unit_default_run_up
-sprite_run_down = spr_unit_default_run_down
+image_speed = 0.5
+sprite_idle = spr_abel_idle
+sprite_run_right = spr_abel_run_right
+sprite_run_left = spr_abel_run_left
+sprite_run_up = spr_abel_run_up
+sprite_run_down = spr_abel_run_down
 
 //Set variables
 
@@ -20,7 +20,7 @@ path = path_add()
 state = "wait"
 move_range = 8
 attack_range_max = 2
-attack_range_min = 1
+attack_range_min = 2
 damage = 30
 team = 1
 
